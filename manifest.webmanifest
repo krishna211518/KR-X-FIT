@@ -1,0 +1,11 @@
+{
+  "name":"KR-X FIT",
+  "short_name":"KR-X FIT",
+  "description":"A simple daily movement and workout companion",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#080d0b",
+  "theme_color":"#080d0b",
+  "icons":[{"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
