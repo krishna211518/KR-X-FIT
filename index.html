@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#080d0b"><meta name="description" content="KR-X FIT — simple daily movement and workout companion"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="KR-X FIT">
-<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="./icon-192.png">
 <title>KR-X FIT</title>
 <style>
 :root{color-scheme:dark;--bg:#080d0b;--panel:#101a15;--panel2:#14221a;--line:#24392c;--green:#a5ff45;--muted:#9aab9e;--white:#f3f8f3;--orange:#ffbd69}
@@ -106,6 +106,7 @@ function loadPlan(key){
   stopTimer();
   seconds=0;
   renderClock();
+  document.getElementById('timerBtn').textContent='Start timer';
   document.getElementById('timerBtn').disabled=false;
   document.getElementById('finishBtn').disabled=false;
   document.getElementById('sessionTitle').textContent=current.name;
@@ -159,6 +160,7 @@ function finishSession(){
   if(!current){document.getElementById('toast').textContent='Choose a workout above before completing a session.';return}
   if(sessionCompleted){document.getElementById('toast').textContent='This session is already logged. Choose another workout when you are ready.';return}
   stopTimer();
+  refreshDailyStats();
   const done=(Number(readStore('krxDone','0'))||0)+1;
   writeStore('krxDone',done);
   document.getElementById('doneCount').textContent=String(done);
