@@ -1,4 +1,4 @@
-const CACHE='kr-x-fit-v2';
+const CACHE='kr-x-fit-v3';
 const FILES=['./','./index.html','./manifest.webmanifest','./icon.svg','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
   const cache=await caches.open(CACHE);
@@ -33,3 +33,4 @@ self.addEventListener('fetch',event=>{
     return response;
   })));
 });
+
