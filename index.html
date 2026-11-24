@@ -24,6 +24,20 @@ body{background:radial-gradient(ellipse at 2% 5%,#bde5d9 0,transparent 32%),radi
 @media(max-width:720px){.wrap{padding-top:16px}.hero{display:block;min-height:362px;padding:23px 21px 185px}.hero-copy{max-width:none}.hero h1{font-size:clamp(29px,8vw,40px);max-width:480px}.hero-visual{right:0;width:76%;height:180px;opacity:.94}.hero-visual svg{height:190px}.stats{gap:7px}.stat{padding:11px 8px}.stat strong{font-size:20px}.card{padding:15px}.workout-card{padding:0}.workout-art{height:153px}.library{grid-template-columns:1fr}.art svg{height:197px}.week-chart{gap:4px}.week-day{font-size:9px}.bar-track{width:62%;max-width:22px}}
 @media(max-width:370px){.hero{padding-left:17px;padding-right:17px}.stats{gap:5px}.stat small{font-size:10px}.top-actions .pill{display:none}.workout-art{height:142px}}
 </style>
+<script>
+/* KR-X FIT recovery: remove stale service workers and app caches. */
+(function(){
+  if(!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.getRegistrations().then(function(registrations){
+    return Promise.all(registrations.map(function(registration){return registration.unregister();}));
+  }).catch(function(){});
+  if('caches' in window){
+    caches.keys().then(function(keys){
+      return Promise.all(keys.filter(function(key){return key.indexOf('kr-x-fit-')===0;}).map(function(key){return caches.delete(key);}));
+    }).catch(function(){});
+  }
+})();
+</script>
 </head>
 <body><main class="wrap">
 <header class="top"><div class="brand"><div class="logo">KX</div><div><b>KR-X FIT</b><small>MOVE • BUILD • REPEAT</small></div></div><div class="top-actions"><button class="install-button" id="installBtn" type="button" aria-label="Install KR-X FIT on Android or Windows" title="Install KR-X FIT app" onclick="installApp()">Install App ↓</button><div class="pill">● YOUR DAILY MOVE</div><span class="install-hint" id="installHint" role="status" aria-live="polite"></span></div></header>
@@ -42,26 +56,6 @@ body{background:radial-gradient(ellipse at 2% 5%,#bde5d9 0,transparent 32%),radi
 <div class="note">Girls and boys can use the same exercise library. Choose movements by comfort, experience and personal goals; exercises are not restricted by gender.</div><div class="note">Safety first: Warm up gently, use comfortable movements, and take breaks whenever needed. Stop if you feel pain, dizziness, or unwell. Rest days are part of being active too. If you have an injury or health concern, ask a trusted adult or healthcare professional before exercising.</div>
 <footer style="text-align:center;color:var(--muted);font-size:11px;padding:25px 0 8px">KR-X FIT • Made for steady, healthy habits</footer>
 </main><div class="bottom">KR-X FIT &nbsp;•&nbsp; Your pace. Your progress.</div>
-<script>
-(function(){
-  function showFitError(message){
-    let panel=document.getElementById('krx-fit-diagnostic');
-    if(!panel){
-      panel=document.createElement('pre');
-      panel.id='krx-fit-diagnostic';
-      panel.style.cssText='position:fixed;z-index:2147483647;inset:12px;padding:18px;overflow:auto;white-space:pre-wrap;background:#fff;color:#8b1e1e;border:2px solid #c33;border-radius:12px;font:14px/1.5 monospace;box-shadow:0 8px 32px #0003';
-      document.body.appendChild(panel);
-    }
-    panel.textContent='KR-X FIT startup error\n\n'+String(message)+'\n\nPlease share this message with support.';
-  }
-  window.addEventListener('error',function(event){
-    showFitError(event.message||event.error||'Unknown JavaScript error');
-  });
-  window.addEventListener('unhandledrejection',function(event){
-    showFitError(event.reason&&event.reason.stack||event.reason||'Unhandled promise rejection');
-  });
-})();
-</script>
 <script>
 const plans={
 easy:{name:'Easy Start',sub:'Gentle movement • 10–12 min',moves:[['March in place','1 minute • easy pace'],['Shoulder rolls','30 seconds'],['Wall push-ups','6–8 comfortable reps'],['Sit-to-stand from a chair','6–8 comfortable reps'],['Gentle side steps','1 minute'],['Slow breathing','1 minute']]},
@@ -526,8 +520,6 @@ renderWorkouts();
 renderLibrary();
 renderActivityHistory();
 renderClock();
-if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).catch(()=>{}));
-}
+// Service worker disabled to prevent stale-cache startup failures.
 </script></body></html>
 
