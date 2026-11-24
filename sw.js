@@ -1,36 +1,8 @@
-const CACHE='kr-x-fit-v7';
-const FILES=['./','./index.html','./manifest.webmanifest','./icon.svg'];
-self.addEventListener('install',event=>event.waitUntil((async()=>{
-  const cache=await caches.open(CACHE);
-  await cache.addAll(FILES);
-  await self.skipWaiting();
-})()));
+/* KR-X FIT recovery worker: retire old cached app versions. */
+self.addEventListener('install',event=>event.waitUntil(self.skipWaiting()));
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
   const keys=await caches.keys();
-  await Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)));
+  await Promise.all(keys.filter(key=>key.indexOf('kr-x-fit-')===0).map(key=>caches.delete(key)));
+  await self.registration.unregister();
   await self.clients.claim();
 })()));
-self.addEventListener('fetch',event=>{
-  const request=event.request;
-  if(request.method!=='GET'||new URL(request.url).origin!==self.location.origin)return;
-  if(request.mode==='navigate'){
-    event.respondWith(fetch(request).then(response=>{
-      if(response&&response.ok){
-        const copy=response.clone();
-        caches.open(CACHE).then(cache=>cache.put('./index.html',copy));
-      }
-      return response;
-    }).catch(async()=>{
-      return await caches.match('./index.html')||new Response('KR-X FIT is offline right now.',{status:503,headers:{'Content-Type':'text/plain; charset=utf-8'}});
-    }));
-    return;
-  }
-  event.respondWith(caches.match(request).then(cached=>cached||fetch(request).then(response=>{
-    if(response&&response.ok){
-      const copy=response.clone();
-      caches.open(CACHE).then(cache=>cache.put(request,copy));
-    }
-    return response;
-  })));
-});
-
