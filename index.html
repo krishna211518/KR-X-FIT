@@ -43,6 +43,26 @@ body{background:radial-gradient(ellipse at 2% 5%,#bde5d9 0,transparent 32%),radi
 <footer style="text-align:center;color:var(--muted);font-size:11px;padding:25px 0 8px">KR-X FIT • Made for steady, healthy habits</footer>
 </main><div class="bottom">KR-X FIT &nbsp;•&nbsp; Your pace. Your progress.</div>
 <script>
+(function(){
+  function showFitError(message){
+    let panel=document.getElementById('krx-fit-diagnostic');
+    if(!panel){
+      panel=document.createElement('pre');
+      panel.id='krx-fit-diagnostic';
+      panel.style.cssText='position:fixed;z-index:2147483647;inset:12px;padding:18px;overflow:auto;white-space:pre-wrap;background:#fff;color:#8b1e1e;border:2px solid #c33;border-radius:12px;font:14px/1.5 monospace;box-shadow:0 8px 32px #0003';
+      document.body.appendChild(panel);
+    }
+    panel.textContent='KR-X FIT startup error\n\n'+String(message)+'\n\nPlease share this message with support.';
+  }
+  window.addEventListener('error',function(event){
+    showFitError(event.message||event.error||'Unknown JavaScript error');
+  });
+  window.addEventListener('unhandledrejection',function(event){
+    showFitError(event.reason&&event.reason.stack||event.reason||'Unhandled promise rejection');
+  });
+})();
+</script>
+<script>
 const plans={
 easy:{name:'Easy Start',sub:'Gentle movement • 10–12 min',moves:[['March in place','1 minute • easy pace'],['Shoulder rolls','30 seconds'],['Wall push-ups','6–8 comfortable reps'],['Sit-to-stand from a chair','6–8 comfortable reps'],['Gentle side steps','1 minute'],['Slow breathing','1 minute']]},
 full:{name:'Full Body Basics',sub:'Beginner bodyweight • 15–18 min',moves:[['Easy march in place','2 minutes'],['Wall push-ups','6–8 comfortable reps'],['Chair sit-to-stand','6–8 comfortable reps'],['Standing calf raises','8–10 comfortable reps'],['Bird-dog (slow)','5 each side'],['Gentle walk and cool-down','2 minutes']]},
