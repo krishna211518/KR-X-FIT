@@ -1,4 +1,4 @@
-const CACHE='kr-x-fit-v6';
+const CACHE='kr-x-fit-v7';
 const FILES=['./','./index.html','./manifest.webmanifest','./icon.svg'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
   const cache=await caches.open(CACHE);
